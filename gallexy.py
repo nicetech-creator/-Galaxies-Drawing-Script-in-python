@@ -129,7 +129,34 @@ def getColor(counter):
 
 
 #Read star information from file (function)
-   
+def ReadStarts(strFileName):
+    if not os.path.isfile(strFileName):
+        print ("Invalid Data file path.")
+        sys.exit(1)
+    try:
+        starfile = open(strFileName)
+        stars = starfile.readlines()
+        star_data = []                  # list for all star tuples
+        named_stars = {}                # a dictionary for named stars
+        for star in stars:
+            words = star.split(',')
+            words = [w.strip() for w in words if len(w.strip()) > 0]
+            if len(words) < 6 or len(words) > 7:
+                raise Exception('Woring data format and we are not able to accept this file')
+            s =( float(words[0]), float(words[1]), float(words[4]) )
+            star_data.append(s)
+            if len(words) == 7: #when named star
+                names = words[-1].split(';')
+                print ('{0} is at ({1}, {2}) with magnitude {3}'.format(names[0].strip(), s[0], s[1], s[2]))
+                for name in names:
+                    named_stars[name.strip()] = s
+        starfile.close()
+
+        return (star_data, named_stars)
+    except:
+        print ("Some format error occures in your star file")
+        sys.exit(1)
+    
 
 #Handle arguments
 def setup():
@@ -167,6 +194,8 @@ def main():
     print (stars_location_file, _names)
 
     #Read star information from file (function)
+    AllStars, NamedStars = ReadStarts(stars_location_file)
+
     pointer = setup()
     #Draw Axes (function)
     pointer.color(AXISCOLOR)
