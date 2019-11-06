@@ -144,7 +144,28 @@ def setup():
     return pointer
 
 def main():
+    _names = False           # flag to print name or not
+    stars_location_file = ''
     #Handle arguments
+    if len(sys.argv) > 3:
+        print ("Too many arguments.")
+        sys.exit(1)
+    _names = '-names' in sys.argv
+
+    if _names == False and len(sys.argv) == 3:
+        print ("Invalid argument as neither input was -names")
+        sys.exit(1)
+    
+    if len(sys.argv) == 3:
+        stars_location_file = sys.argv[sys.argv.index('-names') ^ 0x3]
+    elif len(sys.argv) == 2 and not _names:
+        stars_location_file = sys.argv[1]
+    if stars_location_file == '':
+        stars_location_file = input('Input start location file name:')
+        pass    #prompt for file name
+
+    print (stars_location_file, _names)
+
     #Read star information from file (function)
     pointer = setup()
     #Draw Axes (function)
