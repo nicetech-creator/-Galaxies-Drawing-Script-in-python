@@ -58,11 +58,11 @@ def drawXAxis(pointer):
     pointer.goto(screenX, screenY)
     pointer.down()
     while screenX >= 0 :
-        screenX,screenY = screenCoor(x, y)
         text = float(x)
         drawXAxisLabelTick(pointer, screenX, screenY, text)
         pointer.down()
         x = x - STEPX
+        screenX,screenY = screenCoor(x, y)
     xmin = x + STEPX
 
     xmax = int((WIDTH - 300) / 300)
@@ -74,11 +74,11 @@ def drawXAxis(pointer):
     pointer.goto(screenX, screenY)
     pointer.down()
     while screenX <= WIDTH :
-        screenX,screenY = screenCoor(x, y)
         text = float(x)
         drawXAxisLabelTick(pointer, screenX, screenY, text)
         pointer.down()
         x = x + STEPX
+        screenX,screenY = screenCoor(x, y)
     xmax = x - STEPX
     return xmin, xmax
 
@@ -93,11 +93,11 @@ def drawYAxis(pointer):
     pointer.goto(screenX, screenY)
     pointer.down()
     while screenY >= 0 :
-        screenX,screenY = screenCoor(x, y)
         text = float(y)
         drawYAxisLabelTick(pointer, screenX, screenY, text)
         pointer.down()
         y = y - STEPY
+        screenX,screenY = screenCoor(x, y)
     ymin = y + STEPY
 
     ymax = float((WIDTH - 300)/300)
@@ -109,11 +109,11 @@ def drawYAxis(pointer):
     pointer.goto(screenX, screenY)
     pointer.down()
     while screenY <= HEIGHT :
-        screenX,screenY = screenCoor(x, y)
         text = float(y)
         drawYAxisLabelTick(pointer, screenX, screenY, text)
         pointer.down()
         y = y + STEPY
+        screenX,screenY = screenCoor(x, y)
     ymax = y - STEPY
 
 
@@ -195,6 +195,8 @@ def main():
 
     #Read star information from file (function)
     AllStars, NamedStars = ReadStarts(stars_location_file)
+
+
 
     pointer = setup()
     #Draw Axes (function)
