@@ -195,6 +195,41 @@ def setup():
     pointer.up()
     return pointer
 
+def ReadConstellaction(constellation_file):
+    try:
+        f = open(constellation_file)
+        data = []
+        stars = []
+        lines = f.readlines()
+        for line in lines[1:]:
+            ws = [w.strip() for w in line.split(',') if len(w.strip()) > 0]
+            if len(ws) != 2:
+                raise Exception("Systax Error")
+            for w in ws:
+                if w not in stars:
+                    stars.append(w)
+            data.append((ws[0], ws[1]))
+        s = lines[0].strip() + "  constellation contains {"
+        for star in stars:
+            s += "'" + star + "',"
+        s = s[:-1] + "}"
+        print (s)
+        return (data, lines[0].strip())
+        f.close()
+    except:
+        print ('Format and syntax error')
+        sys.exit(1)
+
+def DrawConstellaction(pointer, _edges, _namedstars,_counter):
+    pointer.color(getColor(_counter))
+    for e in _edges:
+        pointer.up()
+        screenX,screenY = screenCoor(_namedstars[e[0]][0], _namedstars[e[0]][1])
+        pointer.goto(screenX,screenY)
+        pointer.down()
+        screenX,screenY = screenCoor(_namedstars[e[1]][0], _namedstars[e[1]][1])
+        pointer.goto(screenX,screenY)
+
 def main():
     _names = False           # flag to print name or not
     stars_location_file = ''
@@ -231,10 +266,18 @@ def main():
 
     #Draw Stars (function)
     DrawStars(pointer, AllStars, _names)
+
     #Loop getting filenames
+    constellation_file = input('Enter constellation filename:')
+    counter = 0
+    while constellation_file != '':
+        if os.path.isfile(constellation_file) == True:
         #Read constellation file (function)
+            stars, const_name = ReadConstellaction(constellation_file)
+            DrawConstellaction(pointer, stars, NamedStars, counter)
+            counter += 1
         #Draw Constellation (function)
-      
+        constellation_file = input('Enter constellation filename:')
         #Draw bounding box (Bonus) (function)
     a = input()
 
