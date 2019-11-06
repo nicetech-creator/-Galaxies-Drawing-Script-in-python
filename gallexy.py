@@ -144,12 +144,13 @@ def ReadStarts(strFileName):
             if len(words) < 6 or len(words) > 7:
                 raise Exception('Woring data format and we are not able to accept this file')
             s =( float(words[0]), float(words[1]), float(words[4]) )
-            star_data.append(s)
+            names = []
             if len(words) == 7: #when named star
                 names = words[-1].split(';')
                 print ('{0} is at ({1}, {2}) with magnitude {3}'.format(names[0].strip(), s[0], s[1], s[2]))
                 for name in names:
                     named_stars[name.strip()] = s
+            star_data.append((s[0], s[1], s[2], names))
         starfile.close()
 
         return (star_data, named_stars)
@@ -157,6 +158,30 @@ def ReadStarts(strFileName):
         print ("Some format error occures in your star file")
         sys.exit(1)
     
+#Draw stars from given data
+def DrawStars(pointer, _stars, _names):
+    """
+    in : 
+        pointer: turtle pointer
+        _stars : array of tuples (x, y, mag, names:array)
+        _names : flag to indicate to draw name or not
+    """
+    for star in _stars:
+        screenX,screenY = screenCoor(star[0], star[1])
+        pointer.up()
+        pointer.goto(screenX,screenY)
+        pointer.down()
+        if len(star[3]) > 0:#named star
+            pointer.color(STARCOLOR)
+            if _names == True:
+                pointer.write(star[3][0],font=("Arial", 5, "normal"))
+        else:
+            pointer.color(STARCOLOR2)
+        radius = (10 / (star[2] + 2)) / 2
+        pointer.begin_fill()
+        pointer.circle(radius)
+        pointer.end_fill()
+
 
 #Handle arguments
 def setup():
@@ -205,10 +230,12 @@ def main():
     drawYAxis(pointer)
 
     #Draw Stars (function)
+    DrawStars(pointer, AllStars, _names)
     #Loop getting filenames
         #Read constellation file (function)
         #Draw Constellation (function)
       
         #Draw bounding box (Bonus) (function)
+    a = input()
 
 main()
